@@ -20,7 +20,6 @@ from dataclasses import replace
 REPO = Path(__file__).resolve().parents[1]
 BIASDY = REPO / "external" / "Debias_IMU" / "BiasDy"
 sys.path[:0] = [str(BIASDY), str(BIASDY.parent)]
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/plato-matplotlib")
 
 import torch
 from dataset import EUROCDataset
@@ -49,7 +48,7 @@ def resolve_parameters(recipe: dict, outputdir: Path, data_dir: Path, device: st
     parser = euroc.build_parser()
     actions = {action.dest: action for action in parser._actions}
     argv = []
-    controlled = {"data_dir", "data_cache_dir", "outputdir", "device", "test_device", "resume_gyro", "resume_acc", "run_test", "run_compare", "run_axb", "plato_stage", "debug_smoke", "epoch_mse", "epoch_nll"}
+    controlled = {"data_dir", "data_cache_dir", "outputdir", "device", "test_device", "resume_gyro", "resume_acc", "run_test", "run_compare", "plato_stage", "debug_smoke", "epoch_mse", "epoch_nll"}
     for name, value in recipe["parameters"].items():
         if name not in actions or name in controlled:
             raise ValueError(f"Unsupported recipe parameter: {name}")
@@ -106,7 +105,7 @@ def main() -> int:
     if outputdir.exists() and any(outputdir.iterdir()):
         raise FileExistsError(f"Output directory must be empty to protect existing experiments: {outputdir}")
     outputdir.mkdir(parents=True, exist_ok=True)
-    source_files = sorted(path for base in (BIASDY, BIASDY.parent / "SO3diffeq", BIASDY.parent / "Third_party", REPO / "tools") for path in base.rglob("*.py"))
+    source_files = sorted(path for base in (BIASDY, REPO / "tools") for path in base.rglob("*.py"))
     manifest = {
         "status": "running", "recipe": recipe, "resolved_arguments": vars(args),
         "checkpoint_selection": "predeclared final optimizer step; no test-driven selection",

@@ -18,7 +18,7 @@ from evalutation import AOE, ATE
 
 
 def summarize_comparison_metrics(dataset_test: BaseDataset, outputdir: str) -> list[dict[str, float | str]]:
-    """Summarize raw/proposed/Axb metrics from exported trajectory files."""
+    """Summarize raw/proposed metrics from exported trajectory files."""
     rows = []
     for seq in dataset_test.sequences:
         proposed_path = os.path.join(outputdir, "Sequnces-results", seq, "FullTra_result.p")
@@ -46,15 +46,6 @@ def summarize_comparison_metrics(dataset_test: BaseDataset, outputdir: str) -> l
             "plato_ape_m": _to_float(ATE(X_gt[:, :3, 4], p_pred)),
         }
 
-        axb_path = os.path.join(outputdir, "Axb_results", seq, "Axb_results.p")
-        if os.path.exists(axb_path):
-            axb = pload(axb_path)
-            X_Axb = axb["X_Axb"]
-            row.update({
-                "axb_aoe_deg": _to_float(AOE(X_gt[:, :3, :3], X_Axb[:, :3, :3])),
-                "axb_vel_rmse": _to_float(ATE(X_gt[:, :3, 3], X_Axb[:, :3, 3])),
-                "axb_ape_m": _to_float(ATE(X_gt[:, :3, 4], X_Axb[:, :3, 4])),
-            })
         rows.append(row)
     return rows
 
@@ -78,11 +69,6 @@ def print_metrics_table(rows: list[dict[str, float | str]]) -> None:
             f"PLATO AOE {row['plato_aoe_deg']:.3f} deg",
             f"PLATO APE {row['plato_ape_m']:.3f} m",
         ]
-        if "axb_aoe_deg" in row:
-            parts.extend([
-                f"Axb AOE {row['axb_aoe_deg']:.3f} deg",
-                f"Axb APE {row['axb_ape_m']:.3f} m",
-            ])
         print(" | ".join(parts))
 
 

@@ -20,7 +20,6 @@ import Interpolation
 import lie_algebra as Lie
 from dataset import BaseDataset
 from network_for_BiadDy import VFSE23vbiasBase, ba_func_choose, bw_func_choose
-from SO3diffeq import odeint_SO3
 
 from plato.analytic_gradient import adjoint_bias_gradient, invariant_transition_matrices, weighted_se23_mse_state_gradient
 from plato.bias_adjoint import accumulate_ba_euler_adjoint_gradients
@@ -1525,22 +1524,9 @@ def _integrate_batch(model, dataset: BaseDataset, batch, config: PlatoTrainConfi
         )
     if model.biasfunc_a is not None and hasattr(model.biasfunc_a, "set_initial_ba"):
         model.biasfunc_a.set_initial_ba(y0_batch[..., 13:16])
-    if getattr(config, "mean_discretization", "legacy_euler") == "paper_zoh":
-        return _integrate_batch_paper_zoh(
-            model,
-            y0_batch,
-            R0_batch,
-            batch.t_odeint,
-        )
-    return odeint_SO3(
-        model,
-        y0_batch,
-        R0_batch,
-        batch.t_odeint,
-        rtol=1e-7,
-        atol=1e-9,
-        method=config.integral_method,
-    )
+    if config.mean_discretization != "paper_zoh" or config.integral_method != "euler":
+        raise ValueError("The release uses paper_zoh mean propagation and Euler bias dynamics")
+    return _integrate_batch_paper_zoh(model, y0_batch, R0_batch, batch.t_odeint)
 
 
 def _invariant_transition_matrices_for_rollout(

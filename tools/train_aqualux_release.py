@@ -72,7 +72,7 @@ def dataset_parameters(args, cache: Path, dt: float) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(__doc__)
-    parser.add_argument("--config", type=Path, default=REPO / "configs/aqualux_gt_release.json")
+    parser.add_argument("--config", type=Path, default=REPO / "configs/aqualux_gt_stable.json")
     parser.add_argument("--data-dir", type=Path, required=True, help="AquaLux 0524_data directory")
     parser.add_argument("--outputdir", type=Path, required=True)
     parser.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")

@@ -3,62 +3,97 @@
   "euroc_gt_preintegration": {
     "table": "tab:euroc_raw_openvins_combined",
     "supervision": "GT",
-    "metrics": ["aoe_deg", "position_rmse_m"],
+    "metrics": [
+      "aoe_deg",
+      "position_rmse_m"
+    ],
     "sequences": {
-      "MH_02_easy": {"duration_seconds": 149.960, "aoe_deg": 1.027, "position_rmse_m": 85.002},
-      "MH_04_difficult": {"duration_seconds": 98.760, "aoe_deg": 1.371, "position_rmse_m": 100.679},
-      "V1_01_easy": {"duration_seconds": 115.450, "aoe_deg": 3.177, "position_rmse_m": 1310.107},
-      "V1_03_difficult": {"duration_seconds": 104.655, "aoe_deg": 4.855, "position_rmse_m": 881.565},
-      "V2_02_medium": {"duration_seconds": 144.700, "aoe_deg": 4.948, "position_rmse_m": 779.040}
-    }
-  },
-  "euroc_gt_openvins": {
-    "table": "tab:euroc_raw_openvins_combined",
-    "supervision": "GT",
-    "metrics": ["aoe_deg", "position_rmse_m"],
-    "sequences": {
-      "MH_02_easy": {"aoe_deg": 0.734, "position_rmse_m": 0.083},
-      "MH_04_difficult": {"aoe_deg": 0.433, "position_rmse_m": 0.192},
-      "V1_01_easy": {"aoe_deg": 0.568, "position_rmse_m": 0.044},
-      "V1_03_difficult": {"aoe_deg": 1.141, "position_rmse_m": 0.111},
-      "V2_02_medium": {"aoe_deg": 0.903, "position_rmse_m": 0.048}
+      "MH_02_easy": {
+        "duration_seconds": 149.96,
+        "aoe_deg": 1.027,
+        "position_rmse_m": 85.002
+      },
+      "MH_04_difficult": {
+        "duration_seconds": 98.76,
+        "aoe_deg": 1.371,
+        "position_rmse_m": 100.679
+      },
+      "V1_01_easy": {
+        "duration_seconds": 115.45,
+        "aoe_deg": 3.177,
+        "position_rmse_m": 1310.107
+      },
+      "V1_03_difficult": {
+        "duration_seconds": 104.655,
+        "aoe_deg": 4.855,
+        "position_rmse_m": 881.565
+      },
+      "V2_02_medium": {
+        "duration_seconds": 144.7,
+        "aoe_deg": 4.948,
+        "position_rmse_m": 779.04
+      }
     }
   },
   "aqualux_vo_preintegration": {
     "table": "tab:aqualux_preintegration_openvins_combined",
     "supervision": "VO",
-    "metrics": ["aoe_deg", "position_rmse_m"],
+    "metrics": [
+      "aoe_deg",
+      "position_rmse_m"
+    ],
     "sequences": {
-      "Test_001": {"aoe_deg": 3.161, "position_rmse_m": 152.040},
-      "Test_005": {"aoe_deg": 2.988, "position_rmse_m": 168.111},
-      "Test_007": {"aoe_deg": 6.213, "position_rmse_m": 436.972},
-      "Test_017": {"aoe_deg": 3.357, "position_rmse_m": 444.660},
-      "Test_019": {"aoe_deg": 4.160, "position_rmse_m": 363.689}
+      "Test_001": {
+        "aoe_deg": 3.161,
+        "position_rmse_m": 152.04
+      },
+      "Test_005": {
+        "aoe_deg": 2.988,
+        "position_rmse_m": 168.111
+      },
+      "Test_007": {
+        "aoe_deg": 6.213,
+        "position_rmse_m": 436.972
+      },
+      "Test_017": {
+        "aoe_deg": 3.357,
+        "position_rmse_m": 444.66
+      },
+      "Test_019": {
+        "aoe_deg": 4.16,
+        "position_rmse_m": 363.689
+      }
     }
   },
   "aqualux_gt_hlcbd_preintegration": {
     "table": "tab:aqualux_preintegration_openvins_combined",
     "method": "HL-CBD",
     "supervision": "GT",
-    "metrics": ["aoe_deg", "position_rmse_m"],
+    "metrics": [
+      "aoe_deg",
+      "position_rmse_m"
+    ],
     "sequences": {
-      "Test_001": {"aoe_deg": 3.275, "position_rmse_m": 187.850},
-      "Test_005": {"aoe_deg": 3.789, "position_rmse_m": 204.714},
-      "Test_007": {"aoe_deg": 6.182, "position_rmse_m": 472.936},
-      "Test_017": {"aoe_deg": 4.849, "position_rmse_m": 499.592},
-      "Test_019": {"aoe_deg": 5.308, "position_rmse_m": 409.265}
-    }
-  },
-  "aqualux_vo_openvins": {
-    "table": "tab:aqualux_preintegration_openvins_combined",
-    "supervision": "VO",
-    "metrics": ["aoe_deg", "position_rmse_m"],
-    "sequences": {
-      "Test_001": {"aoe_deg": 3.185, "position_rmse_m": 0.149},
-      "Test_005": {"aoe_deg": 5.711, "position_rmse_m": 0.264},
-      "Test_007": {"aoe_deg": 10.880, "position_rmse_m": 0.180},
-      "Test_017": {"aoe_deg": 3.232, "position_rmse_m": 0.106},
-      "Test_019": {"aoe_deg": 8.115, "position_rmse_m": 0.158}
+      "Test_001": {
+        "aoe_deg": 3.275,
+        "position_rmse_m": 187.85
+      },
+      "Test_005": {
+        "aoe_deg": 3.789,
+        "position_rmse_m": 204.714
+      },
+      "Test_007": {
+        "aoe_deg": 6.182,
+        "position_rmse_m": 472.936
+      },
+      "Test_017": {
+        "aoe_deg": 4.849,
+        "position_rmse_m": 499.592
+      },
+      "Test_019": {
+        "aoe_deg": 5.308,
+        "position_rmse_m": 409.265
+      }
     }
   }
 }

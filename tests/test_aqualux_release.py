@@ -10,7 +10,7 @@ from evaluate_aqualux_release import sequence_metrics
 
 
 def test_aqualux_gt_recipe_keeps_native_mse_and_stride_four_nll(tmp_path):
-    recipe = json.loads((REPO / "configs/aqualux_gt_release.json").read_text())
+    recipe = json.loads((REPO / "configs/aqualux_gt_stable.json").read_text())
     args, config = resolve_recipe(recipe, tmp_path / "data", tmp_path / "run", "cpu")
     assert config.supervision == "gt_se23"
     assert config.sup_stride is None

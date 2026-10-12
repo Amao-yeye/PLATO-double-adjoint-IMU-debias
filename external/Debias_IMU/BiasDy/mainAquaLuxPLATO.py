@@ -17,7 +17,6 @@ if BIASDY_DIR not in sys.path:
     sys.path.insert(0, BIASDY_DIR)
 if DEBIAS_ROOT not in sys.path:
     sys.path.insert(0, DEBIAS_ROOT)
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-codex")
 
 from aqualux_dataset import (  # noqa: E402
     DEFAULT_DATA_DIR,
@@ -29,7 +28,7 @@ from aqualux_dataset import (  # noqa: E402
     write_timing_csv,
 )
 from learning import Test  # noqa: E402
-from mainAquaLux import (  # noqa: E402
+from plato.aqualux_exports import (  # noqa: E402
     aggregate_rows,
     export_preintegration_results,
     write_metrics_csv as write_aqualux_metrics_csv,
@@ -279,14 +278,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--data_dir", type=str, default=DEFAULT_DATA_DIR)
     parser.add_argument("--data_cache_dir", type=str, default=None)
     parser.add_argument("--outputdir", type=str, default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument("--integral_method", type=str, default="euler")
+    parser.add_argument("--integral_method", choices=["euler"], default="euler")
     parser.add_argument(
         "--mean_discretization",
-        choices=["paper_zoh", "legacy_euler"],
+        choices=["paper_zoh"],
         default="paper_zoh",
         help=(
-            "SE_2(3) mean propagation: paper-aligned structure-preserving ZOH "
-            "or the original synchronous Euler rollout."
+            "Structure-preserving ZOH state propagation with Euler bias dynamics."
         ),
     )
     parser.add_argument("--network_type_Gyro", type=str, default="bw_func_net")

@@ -64,7 +64,7 @@ class PlatoTrainConfig:
     train_seqs: tuple[str, ...] = ()
     val_seqs: tuple[str, ...] = ()
     test_seqs: tuple[str, ...] = ()
-    mean_discretization: str = "legacy_euler"
+    mean_discretization: str = "paper_zoh"
     mse_gyro_objective: str = "se23"
     ba_rate_anneal_start_fraction: float = 0.6
     ba_rate_final_limit: float = 5e-3
@@ -92,10 +92,8 @@ class PlatoTrainConfig:
             raise ValueError("nll_gt_blocks must be full or rot")
         if self.nll_gt_blocks == "rot" and self.nll_gt_mode != "sparse":
             raise ValueError("rotation-marginal GT NLL requires nll_gt_mode='sparse'")
-        if self.mean_discretization not in ("legacy_euler", "paper_zoh"):
-            raise ValueError(
-                "mean_discretization must be legacy_euler or paper_zoh"
-            )
+        if self.mean_discretization != "paper_zoh":
+            raise ValueError("The release supports mean_discretization=paper_zoh")
         if self.mean_discretization == "paper_zoh" and self.integral_method != "euler":
             raise ValueError(
                 "paper_zoh uses Euler bias dynamics and requires integral_method='euler'"

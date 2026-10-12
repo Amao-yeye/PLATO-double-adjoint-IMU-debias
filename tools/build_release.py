@@ -14,7 +14,7 @@ import tarfile
 REPO = Path(__file__).resolve().parents[1]
 PREFIX = "plato-imu-0.1.0"
 ROOT_FILES = ("README.md", "REPRODUCIBILITY.md", "ARCHITECTURE.md", "CONTRIBUTING.md", "VALIDATION.md", "VALIDATION.json", "AQUALUX_VALIDATION.md", "AQUALUX_VALIDATION.json", "LICENSE", "THIRD_PARTY_NOTICES.md", "CITATION.cff", "pyproject.toml", "requirements.txt", "environment.yml", ".gitignore")
-MODULES = ("dataset", "aqualux_dataset", "Interpolation", "lie_algebra", "utils", "network_for_BiadDy", "learning", "evalutation", "BiasDy_loss", "mainEurocPLATO", "mainAquaLuxPLATO", "mainAquaLux")
+MODULES = ("dataset", "aqualux_dataset", "Interpolation", "lie_algebra", "utils", "network_for_BiadDy", "learning", "evalutation", "mainEurocPLATO", "mainAquaLuxPLATO")
 TOOLS = ("train_euroc_release.py", "evaluate_euroc_release.py", "train_aqualux_release.py", "evaluate_aqualux_release.py", "check_paper_metrics.py", "build_release.py", "export_release_checkpoint.py", "verify_aqualux_layout.py")
 
 
@@ -22,8 +22,8 @@ def selected_files(root: Path = REPO) -> list[Path]:
     relative = list(ROOT_FILES)
     relative += [f"external/Debias_IMU/BiasDy/{name}.py" for name in MODULES]
     relative += [f"tools/{name}" for name in TOOLS]
-    relative += ["scripts/create_env.sh", "scripts/smoke_test.sh", "external/Debias_IMU/LICENSE", "external/Debias_IMU/Third_party/torchdiffeq/LICENSE"]
-    for directory, pattern in (("external/Debias_IMU/BiasDy/plato", "*.py"), ("external/Debias_IMU/SO3diffeq", "*.py"), ("external/Debias_IMU/Third_party/torchdiffeq", "*.py"), ("configs", "*.json"), ("tests", "*.py"), (".github/workflows", "*.yml")):
+    relative += ["scripts/create_env.sh", "scripts/smoke_test.sh", "external/Debias_IMU/LICENSE"]
+    for directory, pattern in (("external/Debias_IMU/BiasDy/plato", "*.py"), ("configs", "*.json"), ("tests", "*.py"), (".github/workflows", "*.yml")):
         relative += [str(path.relative_to(root)) for path in (root / directory).rglob(pattern)]
     paths = sorted(root / name for name in set(relative))
     for path in paths:

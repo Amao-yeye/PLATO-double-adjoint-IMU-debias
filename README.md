@@ -20,7 +20,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q
 bash scripts/smoke_test.sh --skip-data
 ```
 
-The wheel installs `plato`, upstream runtime modules and `plato-euroc` / `plato-aqualux` entry points. Historical module names preserve checkpoint compatibility. Disabling pytest plugin autoload isolates tests from unrelated system plugins, including ROS. CPU tests need no dataset or ROS.
+The wheel installs `plato`, upstream runtime modules and `plato-euroc` / `plato-aqualux` entry points. Validated network names and checkpoint keys preserve compatibility. Disabling pytest plugin autoload isolates tests from unrelated system plugins, including ROS. CPU tests need no dataset or ROS.
 
 ## Train and evaluate EuRoC
 
@@ -54,7 +54,9 @@ python tools/check_paper_metrics.py \
   --reference aqualux_vo_preintegration
 ```
 
-This GT recipe keeps every native IMU state for MSE and uses stride-4 NLL. GT poses are interpolated onto the approximately 998 Hz IMU grid. Its contractive bias NODE is a documented architecture variant; the original architecture is available in `configs/aqualux_gt_release.json`. Five complete held-out trajectories are propagated, and metrics exclude samples farther than 0.02 seconds from an original GT observation. The paper's AquaLux PLATO target uses VO supervision, so a GT run is a numerical comparison under different supervision. Evaluation also reports the paper's GT-trained HL-CBD baseline. See [protocol details](REPRODUCIBILITY.md).
+This GT recipe keeps every native IMU state for MSE and uses stride-4 NLL. GT poses are interpolated onto the approximately 998 Hz IMU grid. Its contractive bias NODE is a documented architecture variant. Five complete held-out trajectories are propagated, and metrics exclude samples farther than 0.02 seconds from an original GT observation. The paper's AquaLux PLATO target uses VO supervision, so a GT run is a numerical comparison under different supervision. Evaluation also reports the paper's GT-trained HL-CBD baseline. See [protocol details](REPRODUCIBILITY.md).
+
+The release uses `paper_zoh` state propagation and Euler bias dynamics. Network factories retain the EuRoC gyro and bounded-rate accelerometer networks, the AquaLux relaxation networks, and the baseline accelerometer network used in gradient checks. Historical trainers, network sweeps, linear baselines, plotting diagnostics and general-purpose ODE solver bundles are omitted.
 
 ## Reuse the kernels
 

@@ -54,7 +54,7 @@ def compare(rows: list[dict], reference: dict, duration_policy: str = "paper") -
 def main() -> int:
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--metrics", type=Path, required=True)
-    parser.add_argument("--reference", choices=["euroc_gt_preintegration", "euroc_gt_openvins", "aqualux_vo_preintegration", "aqualux_gt_hlcbd_preintegration", "aqualux_vo_openvins"], required=True)
+    parser.add_argument("--reference", choices=["euroc_gt_preintegration", "aqualux_vo_preintegration", "aqualux_gt_hlcbd_preintegration"], required=True)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--duration-policy", choices=["paper", "input_overlap"], default="paper", help="input_overlap requires raw-overlap coverage fields and reports paper-duration differences explicitly")
     args = parser.parse_args()

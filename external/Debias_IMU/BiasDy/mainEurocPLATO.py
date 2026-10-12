@@ -12,13 +12,11 @@ if BIASDY_DIR not in sys.path:
     sys.path.insert(0, BIASDY_DIR)
 if DEBIAS_ROOT not in sys.path:
     sys.path.insert(0, DEBIAS_ROOT)
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-codex")
 
 from dataset import EUROCDataset
 from learning import Test
 from network_for_BiadDy import ba_func_choose, bw_func_choose
 from plato.evaluation import print_metrics_table, summarize_comparison_metrics, write_metrics_csv
-from plato.linear_baseline import test_linear_baseline, train_linear_baseline
 from plato.loss_smoke_test import main as loss_smoke_main
 from plato.nll_smoke_test import main as nll_smoke_main
 from plato.supervision import load_vo_for_sequence
@@ -185,27 +183,6 @@ def main():
             raise ValueError("--resume_gyro and --resume_acc are required for --run_test")
         run_test(dataset_test, args, test_gyro, test_acc)
 
-    if args.run_axb:
-        gyro_axb, acc_axb = train_linear_baseline(
-            dataset_train,
-            dataset_val,
-            args.outputdir,
-            epochs=args.epoch_axb,
-            device=args.device,
-            lr=args.lr_Axb,
-            weight_decay=args.weight_decay_Axb,
-            val_freq=args.val_freq_axb,
-            save_freq=args.save_freq_axb,
-        )
-        test_linear_baseline(
-            dataset_test,
-            args.outputdir,
-            gyro_axb,
-            acc_axb,
-            device=args.test_device,
-            recompute=args.test_recompute,
-        )
-
     if args.run_compare:
         rows = summarize_comparison_metrics(dataset_test, args.outputdir)
         csv_path = os.path.join(args.outputdir, "compare", "metrics_summary.csv")
@@ -216,14 +193,13 @@ def main():
 
 def build_parser():
     parser = argparse.ArgumentParser("PLATO EuRoC training for Debias_IMU")
-    parser.add_argument("--integral_method", type=str, default="euler")
+    parser.add_argument("--integral_method", choices=["euler"], default="euler")
     parser.add_argument(
         "--mean_discretization",
-        choices=["paper_zoh", "legacy_euler"],
+        choices=["paper_zoh"],
         default="paper_zoh",
         help=(
-            "SE_2(3) mean propagation: paper-aligned structure-preserving ZOH "
-            "or the original synchronous Euler rollout."
+            "Structure-preserving ZOH state propagation with Euler bias dynamics."
         ),
     )
     parser.add_argument("--outputdir", type=str, default="results/Euroc_PLATO")
@@ -279,7 +255,7 @@ def build_parser():
         default="se23",
         help=(
             "Gyro-stage rotation loss normalization. legacy_so3 exactly matches "
-            "BiasDy_loss.SO3log_loss; se23 uses 0.5*mean(||Log(.)||^2)."
+            "the coordinatewise rotation MSE; se23 uses 0.5*mean(||Log(.)||^2)."
         ),
     )
     parser.add_argument(
@@ -352,16 +328,10 @@ def build_parser():
 
     parser.add_argument("--run_test", action="store_true")
     parser.add_argument("--run_compare", action="store_true")
-    parser.add_argument("--run_axb", action="store_true")
     parser.add_argument("--test_device", type=str, default="cpu")
     parser.add_argument("--test_recompute", action="store_true")
     parser.add_argument("--test_bias_init_mode", choices=["zero", "first", "mean"], default="first")
     parser.add_argument("--test_bias_init_seconds", type=float, default=5.0)
-    parser.add_argument("--epoch_axb", type=int, default=5)
-    parser.add_argument("--lr_Axb", type=float, default=5e-3)
-    parser.add_argument("--weight_decay_Axb", type=float, default=0.0)
-    parser.add_argument("--val_freq_axb", type=int, default=5)
-    parser.add_argument("--save_freq_axb", type=int, default=5)
     return parser
 
 

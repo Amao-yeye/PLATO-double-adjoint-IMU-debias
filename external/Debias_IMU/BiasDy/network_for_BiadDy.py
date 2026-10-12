@@ -1,10 +1,10 @@
+"""Bias networks supported by the EuRoC/AquaLux release and gradient checks."""
 import torch
-import torch.nn as nn
+from torch import nn
 import lie_algebra as Lie
-
 from utils import bmv
 
-######### bias function #########
+
 class bw_func_net(nn.Module):
     def __init__(self):
         super().__init__()
@@ -37,178 +37,6 @@ class bw_func_net(nn.Module):
         return self.linear2(x)
 
 
-class bw_func_net_damped_1e3(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1e-3
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_5e3(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 5e-3
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_2e2(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 2e-2
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_1e1(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_14e2(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.4e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_135e3(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.35e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_13e2(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.3e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_12e2(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.2e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_119e3(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.19e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_115e3(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.15e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_145e3(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.45e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_15e2(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1.5e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_damped_2e1(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 2e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 4:7]
-
-
-class bw_func_net_init_bagate_high_06(bw_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 6e-1
-        self.initial_gate = None
-
-    def set_initial_ba(self, ba0):
-        ba_norm = torch.linalg.norm(ba0, dim=-1, keepdim=True)
-        self.initial_gate = (ba_norm > self.threshold).to(ba0.dtype)
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        if self.initial_gate is None:
-            gate = torch.ones(*y[..., 4:7].shape[:-1], 1, device=y.device, dtype=y.dtype)
-        else:
-            gate = self.initial_gate.to(device=y.device, dtype=y.dtype)
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-def bw_func_choose(network_type, device = "cuda"):
-    if network_type == 'bw_func_relaxation':
-        from plato.models import BiasRelaxation
-        return BiasRelaxation(bias_offset=4,target_limit=0.05).to(device)
-    if network_type == 'bw_func_net':
-        return bw_func_net().to(device)
-    elif network_type == 'bw_func_net_damped_1e3':
-        return bw_func_net_damped_1e3().to(device)
-    elif network_type == 'bw_func_net_damped_5e3':
-        return bw_func_net_damped_5e3().to(device)
-    elif network_type == 'bw_func_net_damped_2e2':
-        return bw_func_net_damped_2e2().to(device)
-    elif network_type == 'bw_func_net_damped_1e1':
-        return bw_func_net_damped_1e1().to(device)
-    elif network_type == 'bw_func_net_damped_14e2':
-        return bw_func_net_damped_14e2().to(device)
-    elif network_type == 'bw_func_net_damped_135e3':
-        return bw_func_net_damped_135e3().to(device)
-    elif network_type == 'bw_func_net_damped_13e2':
-        return bw_func_net_damped_13e2().to(device)
-    elif network_type == 'bw_func_net_damped_12e2':
-        return bw_func_net_damped_12e2().to(device)
-    elif network_type == 'bw_func_net_damped_119e3':
-        return bw_func_net_damped_119e3().to(device)
-    elif network_type == 'bw_func_net_damped_115e3':
-        return bw_func_net_damped_115e3().to(device)
-    elif network_type == 'bw_func_net_damped_145e3':
-        return bw_func_net_damped_145e3().to(device)
-    elif network_type == 'bw_func_net_damped_15e2':
-        return bw_func_net_damped_15e2().to(device)
-    elif network_type == 'bw_func_net_damped_2e1':
-        return bw_func_net_damped_2e1().to(device)
-    elif network_type == 'bw_func_net_init_bagate_high_06':
-        return bw_func_net_init_bagate_high_06().to(device)
-    else:
-        raise NotImplementedError
-
-## ba_func
 class ba_func_net(nn.Module):
     def __init__(self):
         super().__init__()
@@ -240,169 +68,6 @@ class ba_func_net(nn.Module):
         x = self.net(x) + x
         x = self.net2(x) + x
         return self.linear2(x)
-
-
-class ba_func_net_noadot(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(6, 256),
-            nn.GELU(),
-            nn.Linear(256, 512),
-            nn.GELU(),
-            nn.Linear(512, 6),
-        )
-        self.net2 = nn.Sequential(
-            nn.Linear(6, 256),
-            nn.GELU(),
-            nn.Linear(256, 256),
-            nn.GELU(),
-            nn.Linear(256, 6),
-        )
-        self.linear2 = nn.Linear(6, 3)
-
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.normal_(m.weight, mean=0, std=0.001)
-                nn.init.constant_(m.bias, 0)
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        """Use only acceleration bias state and acceleration measurement."""
-        x = torch.cat([y[..., 13:16], imu_meas[..., 3:]], dim=-1)  # order: ba, a
-        x = self.net(x) + x
-        x = self.net2(x) + x
-        return self.linear2(x)
-
-
-class ba_func_net_accwindow(nn.Module):
-    uses_acc_window = True
-    acc_window_steps = 16
-
-    def __init__(self):
-        super().__init__()
-        input_dim = 3 + 3 * int(self.acc_window_steps)
-        self.net = nn.Sequential(
-            nn.Linear(input_dim, 256),
-            nn.GELU(),
-            nn.Linear(256, 512),
-            nn.GELU(),
-            nn.Linear(512, input_dim),
-        )
-        self.net2 = nn.Sequential(
-            nn.Linear(input_dim, 256),
-            nn.GELU(),
-            nn.Linear(256, 256),
-            nn.GELU(),
-            nn.Linear(256, input_dim),
-        )
-        self.linear2 = nn.Linear(input_dim, 3)
-
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.normal_(m.weight, mean=0, std=0.001)
-                nn.init.constant_(m.bias, 0)
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0, acc_window=None):
-        if acc_window is None:
-            acc_window = imu_meas[..., 3:].unsqueeze(-2).expand(*y.shape[:-1], self.acc_window_steps, 3)
-        acc_window = acc_window.reshape(*y.shape[:-1], 3 * int(self.acc_window_steps))
-        x = torch.cat([y[..., 13:16], acc_window], dim=-1)  # order: ba, historical a window
-        x = self.net(x) + x
-        x = self.net2(x) + x
-        return self.linear2(x)
-
-
-class ba_func_net_accwindow_8(ba_func_net_accwindow):
-    acc_window_steps = 8
-
-
-class ba_func_net_accwindow_16(ba_func_net_accwindow):
-    acc_window_steps = 16
-
-
-class ba_func_net_accwindow_32(ba_func_net_accwindow):
-    acc_window_steps = 32
-
-
-class ba_func_net_damped_5e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 5e-2
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 13:16]
-
-
-class ba_func_net_damped_1e1(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 1e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 13:16]
-
-
-class ba_func_net_damped_2e1(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.decay = 2e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return super().forward(y, imu_meas, imu_meas_dot, R0) - self.decay * y[..., 13:16]
-
-
-class ba_func_net_const(ba_func_net):
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return torch.zeros_like(y[..., 13:16])
-
-
-class ba_func_net_scaled_1e1(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.scale = 1e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.scale * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_scaled_25e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.scale = 2.5e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.scale * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_scaled_5e1(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.scale = 5e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.scale * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_rate_tanh_1e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.max_rate = 1e-2
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.max_rate * torch.tanh(super().forward(y, imu_meas, imu_meas_dot, R0) / self.max_rate)
-
-
-class ba_func_net_rate_tanh_5e3(ba_func_net):
-    """Globally bound each learned BA rate component to 5e-3."""
-
-    def __init__(self):
-        super().__init__()
-        self.max_rate = 5e-3
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.max_rate * torch.tanh(
-            super().forward(y, imu_meas, imu_meas_dot, R0) / self.max_rate
-        )
 
 
 class ba_func_net_learnable_rate_tanh(ba_func_net):
@@ -462,161 +127,6 @@ class ba_func_net_learnable_rate_tanh(ba_func_net):
         return rate_limit * torch.tanh(raw_rate / rate_limit)
 
 
-class ba_func_net_rate_tanh_2e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.max_rate = 2e-2
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.max_rate * torch.tanh(super().forward(y, imu_meas, imu_meas_dot, R0) / self.max_rate)
-
-
-class ba_func_net_rate_tanh_5e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.max_rate = 5e-2
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        return self.max_rate * torch.tanh(super().forward(y, imu_meas, imu_meas_dot, R0) / self.max_rate)
-
-
-class ba_func_net_bagate_28e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 2.8e-1
-        self.sharpness = 30.0
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        ba_norm = torch.linalg.norm(y[..., 13:16], dim=-1, keepdim=True)
-        gate = torch.sigmoid(self.sharpness * (self.threshold - ba_norm))
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_bagate_25e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 2.5e-1
-        self.sharpness = 30.0
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        ba_norm = torch.linalg.norm(y[..., 13:16], dim=-1, keepdim=True)
-        gate = torch.sigmoid(self.sharpness * (self.threshold - ba_norm))
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_bagate_hard_22e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 2.2e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        ba_norm = torch.linalg.norm(y[..., 13:16], dim=-1, keepdim=True)
-        gate = (ba_norm < self.threshold).to(y.dtype)
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_bagate_hard_25e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 2.5e-1
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        ba_norm = torch.linalg.norm(y[..., 13:16], dim=-1, keepdim=True)
-        gate = (ba_norm < self.threshold).to(y.dtype)
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_init_bagate_22e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 2.2e-1
-        self.initial_gate = None
-
-    def set_initial_ba(self, ba0):
-        ba_norm = torch.linalg.norm(ba0, dim=-1, keepdim=True)
-        self.initial_gate = (ba_norm < self.threshold).to(ba0.dtype)
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        if self.initial_gate is None:
-            gate = torch.ones(*y[..., 13:16].shape[:-1], 1, device=y.device, dtype=y.dtype)
-        else:
-            gate = self.initial_gate.to(device=y.device, dtype=y.dtype)
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-class ba_func_net_init_bagate_25e2(ba_func_net):
-    def __init__(self):
-        super().__init__()
-        self.threshold = 2.5e-1
-        self.initial_gate = None
-
-    def set_initial_ba(self, ba0):
-        ba_norm = torch.linalg.norm(ba0, dim=-1, keepdim=True)
-        self.initial_gate = (ba_norm < self.threshold).to(ba0.dtype)
-
-    def forward(self, y, imu_meas, imu_meas_dot, R0):
-        if self.initial_gate is None:
-            gate = torch.ones(*y[..., 13:16].shape[:-1], 1, device=y.device, dtype=y.dtype)
-        else:
-            gate = self.initial_gate.to(device=y.device, dtype=y.dtype)
-        return gate * super().forward(y, imu_meas, imu_meas_dot, R0)
-
-
-def ba_func_choose(network_type, device = "cuda"):
-    if network_type == 'ba_func_relaxation':
-        from plato.models import BiasRelaxation
-        return BiasRelaxation(bias_offset=13,target_limit=1.0).to(device)
-    if network_type == 'ba_func_net':
-        return ba_func_net().to(device)
-    elif network_type == 'ba_func_net_noadot':
-        return ba_func_net_noadot().to(device)
-    elif network_type == 'ba_func_net_accwindow_8':
-        return ba_func_net_accwindow_8().to(device)
-    elif network_type == 'ba_func_net_accwindow_16':
-        return ba_func_net_accwindow_16().to(device)
-    elif network_type == 'ba_func_net_accwindow_32':
-        return ba_func_net_accwindow_32().to(device)
-    elif network_type == 'ba_func_net_damped_5e2':
-        return ba_func_net_damped_5e2().to(device)
-    elif network_type == 'ba_func_net_damped_1e1':
-        return ba_func_net_damped_1e1().to(device)
-    elif network_type == 'ba_func_net_damped_2e1':
-        return ba_func_net_damped_2e1().to(device)
-    elif network_type == 'ba_func_net_const':
-        return ba_func_net_const().to(device)
-    elif network_type == 'ba_func_net_scaled_1e1':
-        return ba_func_net_scaled_1e1().to(device)
-    elif network_type == 'ba_func_net_scaled_25e2':
-        return ba_func_net_scaled_25e2().to(device)
-    elif network_type == 'ba_func_net_scaled_5e1':
-        return ba_func_net_scaled_5e1().to(device)
-    elif network_type == 'ba_func_net_rate_tanh_1e2':
-        return ba_func_net_rate_tanh_1e2().to(device)
-    elif network_type == 'ba_func_net_rate_tanh_5e3':
-        return ba_func_net_rate_tanh_5e3().to(device)
-    elif network_type == 'ba_func_net_learnable_rate_tanh':
-        return ba_func_net_learnable_rate_tanh().to(device)
-    elif network_type == 'ba_func_net_rate_tanh_2e2':
-        return ba_func_net_rate_tanh_2e2().to(device)
-    elif network_type == 'ba_func_net_rate_tanh_5e2':
-        return ba_func_net_rate_tanh_5e2().to(device)
-    elif network_type == 'ba_func_net_bagate_28e2':
-        return ba_func_net_bagate_28e2().to(device)
-    elif network_type == 'ba_func_net_bagate_25e2':
-        return ba_func_net_bagate_25e2().to(device)
-    elif network_type == 'ba_func_net_bagate_hard_22e2':
-        return ba_func_net_bagate_hard_22e2().to(device)
-    elif network_type == 'ba_func_net_bagate_hard_25e2':
-        return ba_func_net_bagate_hard_25e2().to(device)
-    elif network_type == 'ba_func_net_init_bagate_22e2':
-        return ba_func_net_init_bagate_22e2().to(device)
-    elif network_type == 'ba_func_net_init_bagate_25e2':
-        return ba_func_net_init_bagate_25e2().to(device)
-    else:
-        raise NotImplementedError
-
-
- ## Base ODE
 class VFSE23vbiasBase(torch.nn.Module):
     def __init__(self, u_func = None, u_dot_func = None,\
                 biasfunc_w: bw_func_net = None, biasfunc_a: ba_func_net = None, biasfunc_v = None, \
@@ -749,3 +259,23 @@ class VFSE23vbiasBase(torch.nn.Module):
         if self.biasfunc_a is not None:
             for param in self.biasfunc_a.parameters():
                 param.requires_grad = True
+
+
+def bw_func_choose(network_type, device="cuda"):
+    if network_type == "bw_func_net":
+        return bw_func_net().to(device)
+    if network_type == "bw_func_relaxation":
+        from plato.models import BiasRelaxation
+        return BiasRelaxation(bias_offset=4, target_limit=0.05).to(device)
+    raise ValueError(f"Unsupported gyro network: {network_type}")
+
+
+def ba_func_choose(network_type, device="cuda"):
+    if network_type == "ba_func_net":
+        return ba_func_net().to(device)
+    if network_type == "ba_func_net_learnable_rate_tanh":
+        return ba_func_net_learnable_rate_tanh().to(device)
+    if network_type == "ba_func_relaxation":
+        from plato.models import BiasRelaxation
+        return BiasRelaxation(bias_offset=13, target_limit=1.0).to(device)
+    raise ValueError(f"Unsupported accelerometer network: {network_type}")

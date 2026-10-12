@@ -18,7 +18,7 @@ inner adjoint: plato.bias_adjoint / plato.gyro_adjoint
 data:          dataset.EUROCDataset / aqualux_dataset.AquaLuxDataset
 ```
 
-Configuration and forward rollout are separated from optimization. Training and evaluation share `rollout.py`. Compatibility imports in `training.py` retain existing symbols. Upstream directories and checkpoint keys are preserved. Public workflows are named in the README; historical experiment scripts are not required by the clean release.
+Configuration and forward rollout are separated from optimization. Training and evaluation share `rollout.py`. Compatibility imports in `training.py` retain existing symbols. Validated network names and checkpoint keys are preserved. Public workflows are named in the README; historical experiment scripts are not required by the clean release.
 
 ## Conventions
 
