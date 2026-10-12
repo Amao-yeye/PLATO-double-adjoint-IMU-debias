@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Please cite the PLATO manuscript and the Debias_IMU baseline when using this software."
+title: "PLATO: Preintegration-Based Likelihood Maximization from Accurate Trajectory Observations for Neural Inertial Odometry"
+type: software
+version: 0.1.0
+license: MIT
+authors:
+  - family-names: Li
+    given-names: Haoying
+  - family-names: Liu
+    given-names: Qihang
+  - family-names: Peng
+    given-names: Yifan
+  - family-names: Miao
+    given-names: Keyan
+  - family-names: Wu
+    given-names: Junfeng

@@ -1,0 +1,75 @@
+# Local environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Host-local settings and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Large datasets are copied separately on each host
+datasets/*
+!datasets/README.md
+!datasets/AquaLux/
+datasets/AquaLux/*
+!datasets/AquaLux/README.md
+*.bag
+*.db3
+*.mcap
+
+# Generated training/evaluation artifacts
+Results/AquaLux/
+Results/openvins_imu/
+external/Debias_IMU/results/
+external/Debias_IMU/logs/
+external/Debias_IMU/models/
+external/Debias_IMU/weights/
+external/Debias_IMU/cache/
+*.p
+*.pt
+*.pth
+*.ckpt
+
+# Downloaded/build-only dependencies
+external/OpenVINS/
+
+# Build and editor artifacts
+build/
+**/build/
+devel/
+install/
+logs/
+.catkin_tools/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+*.log
+*.tmp
+*.swp
+*~
+.DS_Store
+*.egg-info/
+dist/
+.codex/
+.agents/
+PLATO_for_arxiv.zip
+Results/release_euroc*/
+
+# LaTeX products
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.toc

@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plato-imu"
+version = "0.1.0"
+description = "PLATO: double-adjoint learning of inertial bias dynamics and covariance"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = [
+  "torch>=2.4,<3", "numpy>=1.26,<3", "scipy>=1.11,<2",
+  "matplotlib>=3.8,<4", "tensorboard>=2.16,<3", "PyYAML>=6,<7"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+evaluation = ["evo>=1.30,<2", "pandas>=2,<3", "rosbags>=0.10,<0.12"]
+
+[project.scripts]
+plato-euroc = "mainEurocPLATO:main"
+plato-aqualux = "mainAquaLuxPLATO:main"
+
+[tool.setuptools]
+packages = ["plato", "SO3diffeq", "Third_party", "Third_party.torchdiffeq", "Third_party.torchdiffeq._impl"]
+py-modules = ["dataset", "aqualux_dataset", "Interpolation", "lie_algebra", "utils", "network_for_BiadDy", "learning", "evalutation", "BiasDy_loss", "mainEurocPLATO", "mainAquaLuxPLATO", "mainAquaLux"]
+include-package-data = true
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "external/Debias_IMU/LICENSE", "external/Debias_IMU/Third_party/torchdiffeq/LICENSE"]
+
+[tool.setuptools.package-dir]
+"" = "external/Debias_IMU/BiasDy"
+SO3diffeq = "external/Debias_IMU/SO3diffeq"
+Third_party = "external/Debias_IMU/Third_party"
+
+[tool.setuptools.package-data]
+"Third_party.torchdiffeq" = ["LICENSE"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "external/Debias_IMU/BiasDy/plato"]
+python_files = ["test_*.py", "*_smoke_test.py"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100

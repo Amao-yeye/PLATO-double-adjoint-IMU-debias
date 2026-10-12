@@ -1,0 +1,31 @@
+{
+  "dataset": "aqualux",
+  "gyro_updates": 1500,
+  "acc_updates": 1500,
+  "nll_updates": 300,
+  "checkpoint_selection": "final",
+  "parameters": {
+    "plato_supervision": "gt_se23",
+    "plato_window_steps": 128,
+    "batch_size": 512,
+    "mean_discretization": "paper_zoh",
+    "gradient_mode": "double_adjoint",
+    "covariance_gradient_mode": "forward_sensitivity",
+    "network_type_Gyro": "bw_func_net",
+    "network_type_Acc": "ba_func_net_learnable_rate_tanh",
+    "mse_residual_mode": "right",
+    "mse_acc_pos_weight": 10.0,
+    "mse_acc_vel_weight": 1.0,
+    "lr_Gyro": 0.0005,
+    "lr_Acc": 0.0005,
+    "lr_NLL_bias": 0.0000002,
+    "lr_NLL_covariance": 0.00005,
+    "init_sigma_a": 0.1,
+    "init_sigma_g": 0.01,
+    "nll_gt_sup_stride": 4,
+    "nll_gt_include_logdet_h": true,
+    "cov_jitter": 0.0,
+    "val_freq": 100,
+    "save_freq": 100
+  }
+}

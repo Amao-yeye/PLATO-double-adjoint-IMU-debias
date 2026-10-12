@@ -1,0 +1,154 @@
+{
+  "aqualux": {
+    "all_metrics_better": true,
+    "comparison_condition": "GT-trained model vs paper VO-trained PLATO; supervision differs",
+    "evidence": "AQUALUX_VALIDATION.json",
+    "mean_aoe_deg": 3.3638267993927,
+    "mean_position_rmse_m": 265.0618072509766
+  },
+  "comparison": {
+    "aggregation": "unweighted arithmetic mean of per-sequence RMSEs",
+    "all_metrics_better": true,
+    "duration_policy": "input_overlap",
+    "metrics": {
+      "aoe_deg": {
+        "better": true,
+        "improvement_percent": 26.957164029024536,
+        "measured": 2.2465054631233214,
+        "paper": 3.0756
+      },
+      "position_rmse_m": {
+        "better": true,
+        "improvement_percent": 1.3158891202736138,
+        "measured": 622.9716735839844,
+        "paper": 631.2786
+      }
+    },
+    "paper_duration_differences": {
+      "V1_01_easy": {
+        "measured": 143.55499267578125,
+        "paper": 115.45
+      },
+      "V2_02_medium": {
+        "measured": 115.44999694824219,
+        "paper": 144.7
+      }
+    },
+    "sequence_count": 5
+  },
+  "data_sha256": {
+    "MH_01_easy/imu0": "226470999dc8ba758c838982fd7eb2bc9f3f2b489e85a38d0ecf8b9d40785a5b",
+    "MH_01_easy/state_groundtruth_estimate0": "aae2d7c5684724c8afe364d2fd8499a6ed77a9169adf03736531f67d8e7b2117",
+    "MH_02_easy/imu0": "7add4feaa342c6b6874996058b6b5679d908eca25b7e063eae46fec49558cc8e",
+    "MH_02_easy/state_groundtruth_estimate0": "f49666ad4991c80bc467fc05e6d250cec7e28fbd05c1643402298e67438f754f",
+    "MH_03_medium/imu0": "5defd7c9770344df34ebbd5805264341f8a4920c13a22e1b9ef8607168cad02e",
+    "MH_03_medium/state_groundtruth_estimate0": "7e52fd28088b0d428509cc365fbb44ed5d910e5174ac155e1d987923c056000f",
+    "MH_04_difficult/imu0": "330c25e4532c1f27853d0eeee06968d5c4c00c16be1187fdcfd909cfe060360c",
+    "MH_04_difficult/state_groundtruth_estimate0": "c13de3d5ba9ead60688505d4773286c290fa642264943c88aa182d0eac9f4960",
+    "MH_05_difficult/imu0": "e6498fb86f0b618abb07b256b1822957bb4bcf158d07cc82d3b43ca8166ec004",
+    "MH_05_difficult/state_groundtruth_estimate0": "da13e5dcb3d5fc2f12c4e8bfae10dd380d765150be3312f989b0bc5550965451",
+    "V1_01_easy/imu0": "4cef78a5cf7c8ee52016a160de4b50184da2a216d615feb7ebbbb3bc99efa89e",
+    "V1_01_easy/state_groundtruth_estimate0": "701200e6924ba845ccdeea884bd717c82d1ed91f480913ea6e2e6ccb9c0fbf6d",
+    "V1_02_medium/imu0": "51804ce6362dc200fff3ed6a3aba1df769528badf1a877d19d5cac976a544c09",
+    "V1_02_medium/state_groundtruth_estimate0": "fed415eee44313584b9c4f61010dac146d5e4a4a35301db25b1ecd7d4d91b5f0",
+    "V1_03_difficult/imu0": "543835f7b7dd9d1287c9052955e030ade113c51dc97ec2c15d13a318521ad0d7",
+    "V1_03_difficult/state_groundtruth_estimate0": "703ba51a854daba80f20df93e76605c2278b3f227afe2bcbe9eb4255186fc3d9",
+    "V2_01_easy/imu0": "d8df41e85c12761104043264a61054ad4bfa19087886e847f4e0412a19cd1633",
+    "V2_01_easy/state_groundtruth_estimate0": "315807fd7d91868ed6085a3d8fde40315842135f13199ed83e2e6270eb5b5126",
+    "V2_02_medium/imu0": "7f1028007d030a38e5c7e2cee19ca773015b2fecbbbe80794f5c34e900b2ee8e",
+    "V2_02_medium/state_groundtruth_estimate0": "019ec178d0d2636dca66808f6422ae835b24f14184c54823b3a4a47bf187be2d",
+    "V2_03_difficult/imu0": "55911f078feea76eb5bdeb97c9ebbebb679de39c4dd44c50e81064d5d8cf77f6",
+    "V2_03_difficult/state_groundtruth_estimate0": "2c273cf35909c4ca7786137cf63f04cf292ca13da48c406c72b8e96a2b1372e5"
+  },
+  "date_utc": "2026-10-12T09:20:15.071880+00:00",
+  "environment": {
+    "cuda": "12.8",
+    "device": "cuda:0",
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "python": "3.11.15",
+    "threads": 1,
+    "torch": "2.7.0+cu128"
+  },
+  "limitations": [
+    "Earlier from-scratch stride-2 diagnostic did not improve both means; no from-scratch stride-4 performance guarantee.",
+    "V1_01/V2_02 durations in the paper differ from the raw-data overlap; comparison uses full input overlap and retains original paper values.",
+    "No independent reviewer-agent report was available in this session; numerical tests and manual source review were performed."
+  ],
+  "mse_checkpoint_sha256": {
+    "acc": "a783784fdcb327c7d67ef7d9a415bd03b2f4118e85d5270b47caccc2ef27005f",
+    "gyro": "5131978bba06d420adf9a993fd89a5a5186701cb32e18ead52f455a63b15ce7e"
+  },
+  "per_sequence": [
+    {
+      "aoe_deg": 1.2530161142349243,
+      "duration_seconds": 149.9550018310547,
+      "input_overlap_duration_seconds": 149.954999808,
+      "input_overlap_sample_count": 29992,
+      "position_rmse_m": 172.93727111816406,
+      "sample_count": 29992,
+      "sequence": "MH_02_easy",
+      "velocity_rmse_mps": 5.592287540435791
+    },
+    {
+      "aoe_deg": 0.7052146792411804,
+      "duration_seconds": 98.76000213623047,
+      "input_overlap_duration_seconds": 98.76,
+      "input_overlap_sample_count": 19753,
+      "position_rmse_m": 88.47218322753906,
+      "sample_count": 19753,
+      "sequence": "MH_04_difficult",
+      "velocity_rmse_mps": 3.437537908554077
+    },
+    {
+      "aoe_deg": 4.282584190368652,
+      "duration_seconds": 115.44999694824219,
+      "input_overlap_duration_seconds": 115.449999872,
+      "input_overlap_sample_count": 23091,
+      "position_rmse_m": 872.983642578125,
+      "sample_count": 23091,
+      "sequence": "V2_02_medium",
+      "velocity_rmse_mps": 23.91472053527832
+    },
+    {
+      "aoe_deg": 2.6650784015655518,
+      "duration_seconds": 104.65499877929688,
+      "input_overlap_duration_seconds": 104.655000064,
+      "input_overlap_sample_count": 20932,
+      "position_rmse_m": 702.4812622070312,
+      "sample_count": 20932,
+      "sequence": "V1_03_difficult",
+      "velocity_rmse_mps": 20.390562057495117
+    },
+    {
+      "aoe_deg": 2.326633930206299,
+      "duration_seconds": 143.55499267578125,
+      "input_overlap_duration_seconds": 143.555000064,
+      "input_overlap_sample_count": 28712,
+      "position_rmse_m": 1277.9840087890625,
+      "sample_count": 28712,
+      "sequence": "V1_01_easy",
+      "velocity_rmse_mps": 23.91583251953125
+    }
+  ],
+  "portable_checkpoint_sha256": "cd3157b6dcd91e4a2b1818261dab38a832ef65620f1d832f2b9e6247fa4ee67a",
+  "protocol": {
+    "acc_mse_prior_updates": 1500,
+    "alignment": "none",
+    "bias_initialization": "first GT-derived bias",
+    "checkpoint_selection": "predeclared final steps",
+    "gyro_mse_prior_updates": 1801,
+    "initialization": "existing native-rate MSE final checkpoints",
+    "mean_discretization": "paper_zoh",
+    "mse_supervision": "native 200 Hz",
+    "nll_bias_updates": 150,
+    "nll_covariance_updates": 150,
+    "nll_supervision_stride": 4,
+    "nll_total_updates": 300,
+    "state_initialization": "first GT rotation, velocity, position"
+  },
+  "scope": "EuRoC GT preintegration plus AquaLux GT stable variant; OpenVINS excluded",
+  "training_checkpoint_sha256": "49dfa1cb7d98502d2306e725c48279805798188ec2fece844b311e859a6acc63",
+  "verification": {
+    "local_tests_passed": 76
+  }
+}
